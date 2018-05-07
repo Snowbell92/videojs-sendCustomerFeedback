@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>videojs-sendcustomerfeedback Demo</title>
+  <link href="node_modules/video.js/dist/video-js.css" rel="stylesheet">
+  <link href="dist/videojs-sendcustomerfeedback.css" rel="stylesheet">
+</head>
+<body>
+  <video id="videojs-sendcustomerfeedback-player" class="video-js vjs-default-skin" controls>
+    <source src="//vjs.zencdn.net/v/oceans.mp4" type='video/mp4'>
+    <source src="//vjs.zencdn.net/v/oceans.webm" type='video/webm'>
+  </video>
+  <ul>
+    <li><a href="test/">Run unit tests in browser.</a></li>
+    <li><a href="docs/api/">Read generated docs.</a></li>
+  </ul>
+  <script src="node_modules/es5-shim/es5-shim.js"></script>
+  <script src="node_modules/video.js/dist/video.js"></script>
+  <script src="dist/videojs-sendcustomerfeedback.js"></script>
+  <script>
+    var player = videojs('videojs-sendcustomerfeedback-player');
+    player.sendcustomerfeedback({
+        title: "What's happening? ",
+        description: "Please check all those that apply",
+        feedbackOptions: [{
+            optionID: '1',
+            optionType: 'checkbox', // can be radio too, if needed. 
+            text: 'labeling problems',
+            subtext: 'wrong title or summery or episode out of order',
+            shouldHaveATextarea: false
+        }, {
+            optionID: '2',
+            optionType: 'checkbox', // can be radio too, if needed. 
+            text: 'Video Problems',
+            subtext: 'blurry, cut out or looks strange',
+            shouldHaveATextarea: true
+        }]
+    });
+  </script>
+</body>
+</html>
