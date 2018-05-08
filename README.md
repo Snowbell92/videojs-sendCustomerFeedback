@@ -1,6 +1,8 @@
 # videojs-sendcustomerfeedback
 
-a customer feedback for that will collect information from a list of checkboxes and will send it to a preferred url. 
+a customer feedback form that will collect information from a list of checkboxes and will send it to a preferred url. 
+
+still work in progress. 
 
 ## Table of Contents
 
