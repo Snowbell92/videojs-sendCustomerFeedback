@@ -1,0 +1,14 @@
+{
+  "generator-videojs-plugin": {
+    "scope": "",
+    "name": "sendcustomerfeedback",
+    "description": "a customer feedback for that will collect information from a list of checkboxes and will send it to a preferred url. ",
+    "author": "Samia Ruponti <samia@bongobd.com>",
+    "license": "mit",
+    "sass": true,
+    "ie8": true,
+    "docs": true,
+    "lang": false,
+    "husky": "test"
+  }
+}
