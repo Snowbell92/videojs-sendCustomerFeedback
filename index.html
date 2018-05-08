@@ -5,6 +5,13 @@
   <title>videojs-sendcustomerfeedback Demo</title>
   <link href="node_modules/video.js/dist/video-js.css" rel="stylesheet">
   <link href="dist/videojs-sendcustomerfeedback.css" rel="stylesheet">
+  <style type="text/css">
+    /* my shortcut version of normalize. typography will look slightly out of place without it.*/
+    *{
+      margin: 0;
+      padding: 0;
+    }
+  </style>
 </head>
 <body>
   <video id="videojs-sendcustomerfeedback-player" class="video-js vjs-default-skin" controls>
@@ -23,6 +30,7 @@
     player.sendcustomerfeedback({
         title: "What's happening? ",
         description: "Please check all those that apply",
+        url: "post.php",
         feedbackOptions: [{
             optionID: '1',
             optionType: 'checkbox', // can be radio too, if needed. 

@@ -5,6 +5,7 @@ import {version as VERSION} from '../package.json';
 const defaults = {
 	title : "",
 	description : "",
+	url : "", // the url for the form to submit
 	feedbackOptions: [{
 		optionID : '',
 		optionType: 'checkbox', // can be radio too, if needed. 
@@ -22,9 +23,49 @@ function _createElement (type, className){
 	return el; 
 }
 
-// constructing the options div 
+// builds our httprequest
+
+function sendData(form,url){
+
+	let XHR = new XMLHttpRequest();
+	let feedbackFormData = new FormData(form);
+
+	XHR.addEventListener('load', function(event){
+		console.log(event.target.responseText);
+	});
+
+	XHR.addEventListener('error', function(event){
+		console.log(event.target.responseText)
+	})
+
+	//let's push our data to formdata
+
+	/*let allData = {
+
+		userAgent : navigator.userAgent, 
+		device : 'PC',
+		ip : 'test ip',
+		feedback : 
+
+	}*/
+
+	feedbackFormData.append('userAgent', navigator.userAgent);
+	feedbackFormData.append('platform', navigator.platform);
+
+
+
+	XHR.open("POST", url);
+
+	XHR.send(feedbackFormData);
+
+	//return false; // I don't want to actually send data! I'll take it off as soon as everything is working.
+
+}
+
 
 const constructFeedbackOptions = (player, options) => {
+	
+	// constructing the options div 
 
 	let feedback = options.feedbackOptions; // see default object
 
@@ -50,7 +91,8 @@ const constructFeedbackOptions = (player, options) => {
 			_label = _createElement('label',''),
 			_input = _createElement('input', '');
 			_input.type = feedback[i].optionType;
-			_input.value = feedback[i].optionID;
+			_input.value = feedback[i].text;
+			_input.name ="feedback[]";
 
 			let _text = _createElement('h5','');
 			_text.innerHTML = feedback[i].text;
@@ -73,12 +115,32 @@ const constructFeedbackOptions = (player, options) => {
 
 		}
 
+		let button = _createElement('button', 'form-submit');
+		button.type = "button";
+		button.innerHTML = "send feedback";
+
+		_form.appendChild(button);
+
 		container.appendChild(header);
 		container.appendChild(_form);
 
 		_frag.appendChild(container);
 
 		player.el().appendChild(_frag);
+
+
+		// let's take care of posting the data
+
+		//I'm using formdata object, so no < IE11 and opera mini support. 
+		// at least opera mini is consistent, it does not support ANY javascript!
+
+		button.addEventListener('click', function(event){
+			console.log(FormData);
+			//return;
+			sendData(_form, options.url);
+		})
+
+
 
 
 }
