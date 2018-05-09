@@ -1,4 +1,5 @@
 import videojs from 'video.js';
+import platform from 'platform';
 import { version as VERSION } from '../package.json';
 
 // Default options for the plugin.
@@ -8,13 +9,33 @@ const defaults = {
   url: "", // the url for the form to submit
   userIp: '', //optional, should get from twig. 
   feedbackOptions: [{
-    optionID: '',
     optionType: 'checkbox', // can be radio too, if needed. 
     text: '',
     subtext: '',
     shouldHaveATextarea: false
   }]
 };
+
+// capturing deviceInfo. Using platform.js 
+// github : https://github.com/bestiejs/platform.js
+
+const getDeviceInfo =() => {
+
+	let deviceInfo = {
+		browser : platform.name,
+		device : platform.product || 'No product information was found',
+		deviceUserAgent : platform.ua,
+		browserVersion : platform.version , 
+		renderEngine : platform.layout,
+		os: platform.os.family,
+		osVersion : platform.os.version,
+		deviceManufacturer : platform.manufacturer || 'No manufacturer information was found' , 
+		deviceDescription : platform.description 
+	}
+
+	return JSON.stringify(deviceInfo);
+
+}
 
 // let's capture any error that player might throw
 // the whole purpose of the plugin is to submit errors and feedbacks. 
@@ -28,7 +49,6 @@ const getPlayerErrors = (player) => {
 
 
   if (!player.error()) {
-    console.log('no error');
     error = 'No error reported on player';
 
   } else {
@@ -38,9 +58,6 @@ const getPlayerErrors = (player) => {
     });
   }
 
-
-
-  console.log(error);
   return error;
 }
 
@@ -67,20 +84,19 @@ function sendData(form, url, userIp) {
     console.log(event.target.responseText)
   })
 
-  //let's push our data to formdata
+  //let's push some extra information to formdata
 
   feedbackFormData.append('userAgent', navigator.userAgent);
   feedbackFormData.append('platform', navigator.platform);
   feedbackFormData.append('userIp', userIp);
   feedbackFormData.append('error[]', getPlayerErrors(player)); //can videoJS throw multiple errors? 
+  feedbackFormData.append('deviceInfo', getDeviceInfo());
 
 
 
   XHR.open("POST", url);
 
   XHR.send(feedbackFormData);
-
-  //return false; // I don't want to actually send data! I'll take it off as soon as everything is working.
 
 }
 
@@ -161,15 +177,8 @@ const constructFeedbackOptions = (player, options) => {
   // at least opera mini is consistent, it does not support ANY javascript!
 
   button.addEventListener('click', function(event) {
-    //return;
     sendData(_form, options.url, options.userIp);
   })
-
-
-
-
-
-
 }
 
 
