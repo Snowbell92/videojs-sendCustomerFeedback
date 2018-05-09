@@ -1,144 +1,171 @@
 import videojs from 'video.js';
-import {version as VERSION} from '../package.json';
+import { version as VERSION } from '../package.json';
 
 // Default options for the plugin.
 const defaults = {
-	title : "",
-	description : "",
-	url : "", // the url for the form to submit
-	feedbackOptions: [{
-		optionID : '',
-		optionType: 'checkbox', // can be radio too, if needed. 
-		text: '',
-		subtext : '',
-		shouldHaveATextarea : false
-	}]
+  title: "",
+  description: "",
+  url: "", // the url for the form to submit
+  userIp: '', //optional, should get from twig. 
+  feedbackOptions: [{
+    optionID: '',
+    optionType: 'checkbox', // can be radio too, if needed. 
+    text: '',
+    subtext: '',
+    shouldHaveATextarea: false
+  }]
 };
+
+// let's capture any error that player might throw
+// the whole purpose of the plugin is to submit errors and feedbacks. 
+
+const getPlayerErrors = (player) => {
+
+  let error = {
+    code: '',
+    message: ''
+  };
+
+
+  if (!player.error()) {
+    console.log('no error');
+    error = 'No error reported on player';
+
+  } else {
+    error = JSON.stringify({
+      code: player.error().code,
+      message: player.error().message
+    });
+  }
+
+
+
+  console.log(error);
+  return error;
+}
 
 // helper function for creating elements 
 
-function _createElement (type, className){
-	let el = document.createElement(type);
-	el.className = className; 
-	return el; 
+function _createElement(type, className) {
+  let el = document.createElement(type);
+  el.className = className;
+  return el;
 }
 
 // builds our httprequest
 
-function sendData(form,url){
+function sendData(form, url, userIp) {
 
-	let XHR = new XMLHttpRequest();
-	let feedbackFormData = new FormData(form);
+  let XHR = new XMLHttpRequest();
+  let feedbackFormData = new FormData(form);
 
-	XHR.addEventListener('load', function(event){
-		console.log(event.target.responseText);
-	});
+  XHR.addEventListener('load', function(event) {
+    console.log(event.target.responseText);
+  });
 
-	XHR.addEventListener('error', function(event){
-		console.log(event.target.responseText)
-	})
+  XHR.addEventListener('error', function(event) {
+    console.log(event.target.responseText)
+  })
 
-	//let's push our data to formdata
+  //let's push our data to formdata
 
-	/*let allData = {
-
-		userAgent : navigator.userAgent, 
-		device : 'PC',
-		ip : 'test ip',
-		feedback : 
-
-	}*/
-
-	feedbackFormData.append('userAgent', navigator.userAgent);
-	feedbackFormData.append('platform', navigator.platform);
+  feedbackFormData.append('userAgent', navigator.userAgent);
+  feedbackFormData.append('platform', navigator.platform);
+  feedbackFormData.append('userIp', userIp);
+  feedbackFormData.append('error[]', getPlayerErrors(player)); //can videoJS throw multiple errors? 
 
 
 
-	XHR.open("POST", url);
+  XHR.open("POST", url);
 
-	XHR.send(feedbackFormData);
+  XHR.send(feedbackFormData);
 
-	//return false; // I don't want to actually send data! I'll take it off as soon as everything is working.
+  //return false; // I don't want to actually send data! I'll take it off as soon as everything is working.
 
 }
 
 
 const constructFeedbackOptions = (player, options) => {
-	
-	// constructing the options div 
 
-	let feedback = options.feedbackOptions; // see default object
+  player.on('error', function() {
+    getPlayerErrors(player);
+  })
 
-	let _frag = document.createDocumentFragment();
+  // constructing the options div 
 
-	let container = _createElement('div', 'vjs-feedback'),
-	    header    = _createElement('div', 'vjs-feedback-header'),
-	    title     = _createElement('h3', 'vjs-feedback-form-title'),
-	    description = _createElement('p', 'vjs-feedback-form-description'),
-		_form     = _createElement('form', 'vjs-feedback-form form-control')
+  let feedback = options.feedbackOptions; // see default object
 
-		title.innerHTML = options.title;
-		description.innerHTML = options.description;
+  let _frag = document.createDocumentFragment();
 
-		header.appendChild(title);
-		header.appendChild(description);
+  let container = _createElement('div', 'vjs-feedback'),
+    header = _createElement('div', 'vjs-feedback-header'),
+    title = _createElement('h3', 'vjs-feedback-form-title'),
+    description = _createElement('p', 'vjs-feedback-form-description'),
+    _form = _createElement('form', 'vjs-feedback-form form-control')
 
-		// here are the checkboxes
-		let j = feedback.length - 1;
-		for (let i = 0 ; i <= j ; i++){
+  title.innerHTML = options.title;
+  description.innerHTML = options.description;
 
-			let _div = _createElement('div', 'checkbox'),
-			_label = _createElement('label',''),
-			_input = _createElement('input', '');
-			_input.type = feedback[i].optionType;
-			_input.value = feedback[i].text;
-			_input.name ="feedback[]";
+  header.appendChild(title);
+  header.appendChild(description);
 
-			let _text = _createElement('h5','');
-			_text.innerHTML = feedback[i].text;
+  // here are the checkboxes
+  let j = feedback.length - 1;
+  for (let i = 0; i <= j; i++) {
 
-			let _subtext = _createElement('h6','');
-			_subtext.innerHTML = feedback[i].subtext;
+    let _div = _createElement('div', 'checkbox'),
+      _label = _createElement('label', ''),
+      _input = _createElement('input', '');
+    _input.type = feedback[i].optionType;
+    _input.value = feedback[i].text;
+    _input.name = "feedback[]";
 
-			_label.appendChild(_input);
-			_label.appendChild(_text);
-			_label.appendChild(_subtext);
+    let _text = _createElement('h5', '');
+    _text.innerHTML = feedback[i].text;
 
-			_div.appendChild(_label);
+    let _subtext = _createElement('h6', '');
+    _subtext.innerHTML = feedback[i].subtext;
 
-			if (feedback[i].shouldHaveATextarea == true) {
-				console.log('show textarea')
-			}
+    _label.appendChild(_input);
+    _label.appendChild(_text);
+    _label.appendChild(_subtext);
 
-			_form.appendChild(_div);
+    _div.appendChild(_label);
 
+    if (feedback[i].shouldHaveATextarea == true) {
+      console.log('show textarea')
+    }
 
-		}
-
-		let button = _createElement('button', 'form-submit');
-		button.type = "button";
-		button.innerHTML = "send feedback";
-
-		_form.appendChild(button);
-
-		container.appendChild(header);
-		container.appendChild(_form);
-
-		_frag.appendChild(container);
-
-		player.el().appendChild(_frag);
+    _form.appendChild(_div);
 
 
-		// let's take care of posting the data
+  }
 
-		//I'm using formdata object, so no < IE11 and opera mini support. 
-		// at least opera mini is consistent, it does not support ANY javascript!
+  let button = _createElement('button', 'form-submit');
+  button.type = "button";
+  button.innerHTML = "send feedback";
 
-		button.addEventListener('click', function(event){
-			console.log(FormData);
-			//return;
-			sendData(_form, options.url);
-		})
+  _form.appendChild(button);
+
+  container.appendChild(header);
+  container.appendChild(_form);
+
+  _frag.appendChild(container);
+
+  player.el().appendChild(_frag);
+
+
+  // let's take care of posting the data
+
+  //I'm using formdata object, so no < IE11 and opera mini support. 
+  // at least opera mini is consistent, it does not support ANY javascript!
+
+  button.addEventListener('click', function(event) {
+    //return;
+    sendData(_form, options.url, options.userIp);
+  })
+
+
 
 
 
@@ -167,7 +194,7 @@ const registerPlugin = videojs.registerPlugin || videojs.plugin;
  */
 const onPlayerReady = (player, options) => {
   player.addClass('vjs-sendcustomerfeedback');
-  player.on('ready', () => constructFeedbackOptions(player,options)); 
+  player.on('ready', () => constructFeedbackOptions(player, options));
 };
 
 /**
