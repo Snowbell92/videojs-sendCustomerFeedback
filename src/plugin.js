@@ -17,28 +17,27 @@ const defaults = {
 };
 
 // capturing deviceInfo. Using platform.js 
-// github : https://github.com/bestiejs/platform.js
+//github : https://github.com/bestiejs/platform.js
 
-const getDeviceInfo =() => {
+const getDeviceInfo = () => {
+  let deviceInfo = {
+    browser: platform.name,
+    device: platform.product || 'No product information was found',
+    deviceUserAgent: platform.ua,
+    browserVersion: platform.version,
+    renderEngine: platform.layout,
+    os: platform.os.family,
+    osVersion: platform.os.version,
+    deviceManufacturer: platform.manufacturer || 'No manufacturer information was found',
+    deviceDescription: platform.description
+  }
 
-	let deviceInfo = {
-		browser : platform.name,
-		device : platform.product || 'No product information was found',
-		deviceUserAgent : platform.ua,
-		browserVersion : platform.version , 
-		renderEngine : platform.layout,
-		os: platform.os.family,
-		osVersion : platform.os.version,
-		deviceManufacturer : platform.manufacturer || 'No manufacturer information was found' , 
-		deviceDescription : platform.description 
-	}
-
-	return JSON.stringify(deviceInfo);
+  return JSON.stringify(deviceInfo);
 
 }
 
-// let's capture any error that player might throw
-// the whole purpose of the plugin is to submit errors and feedbacks. 
+//let's capture any error that player might throw
+//the whole purpose of the plugin is to submit errors and feedbacks. 
 
 const getPlayerErrors = (player) => {
 
@@ -61,7 +60,7 @@ const getPlayerErrors = (player) => {
   return error;
 }
 
-// helper function for creating elements 
+//helper function for creating elements 
 
 function _createElement(type, className) {
   let el = document.createElement(type);
@@ -69,7 +68,7 @@ function _createElement(type, className) {
   return el;
 }
 
-// builds our httprequest
+//builds our httprequest
 
 function sendData(form, url, userIp) {
 
@@ -107,9 +106,9 @@ const constructFeedbackOptions = (player, options) => {
     getPlayerErrors(player);
   })
 
-  // constructing the options div 
+  //constructing the options div
 
-  let feedback = options.feedbackOptions; // see default object
+  let feedback = options.feedbackOptions; //see default object
 
   let _frag = document.createDocumentFragment();
 
@@ -125,7 +124,7 @@ const constructFeedbackOptions = (player, options) => {
   header.appendChild(title);
   header.appendChild(description);
 
-  // here are the checkboxes
+  //here are the checkboxes
   let j = feedback.length - 1;
   for (let i = 0; i <= j; i++) {
 
@@ -168,24 +167,79 @@ const constructFeedbackOptions = (player, options) => {
 
   _frag.appendChild(container);
 
-  player.el().appendChild(_frag);
+  //let's make a modal window and append our UI to it.
+
+  let contentEl = _createElement('div');
+  contentEl.appendChild(_frag);
+
+  let ModalDialog = videojs.getComponent('ModalDialog');
+  let modal = new ModalDialog(player, {
+    content: contentEl,
+    //We don't want this modal to go away when it closes.
+    temporary: false,
+  });
 
 
-  // let's take care of posting the data
+  player.addChild(modal);
+
+
+  //let's make the floating button that will open the modal window. 
+
+  let floatingButton = _createElement('button', 'open-feedback-form');
+  floatingButton.type = 'button';
+  floatingButton.title = "Problem? Send us some details!";
+  floatingButton.innerHTML = "open feedback";
+
+
+  player.el().appendChild(floatingButton);
+
+  floatingButton.addEventListener('click', function() {
+    console.log('clicked');
+    modal.open();
+  })
+
+
+  //let's take care of posting the data
 
   //I'm using formdata object, so no < IE11 and opera mini support. 
-  // at least opera mini is consistent, it does not support ANY javascript!
+  //at least opera mini is consistent, it does not support ANY javascript!
 
-  button.addEventListener('click', function(event) {
-    sendData(_form, options.url, options.userIp);
+  //but have to check first if the form is empty.
+  //no point submitting an empty form.
+  let flag = false;
+
+  function checkEmptyForm(elements) {
+
+    for (let i = 0; i < _form.elements.length; i++) {
+
+      if (_form.elements[i].checked) {
+        flag = true;
+        console.log(flag)
+        return flag;
+      }
+      return flag
+    }
+  }
+
+  button.addEventListener('click', function(event, elements) {
+    console.log(checkEmptyForm());
+    if (!checkEmptyForm()) {
+      let message = _createElement('div', 'error-message');
+      message.innerHTML = '<p>' + 'Form is empty. Please select an option and try again.' + '</p>';
+      _form.insertBefore(message, button);
+
+    } else {
+      button.disabled = true;
+      sendData(_form, options.url, options.userIp);
+    }
   })
 }
 
 
 
-// Cross-compatibility for Video.js 5 and 6.
+//Cross-compatibility for Video.js 5 and 6.
 const registerPlugin = videojs.registerPlugin || videojs.plugin;
-// const dom = videojs.dom || videojs;
+//const dom = videojs.dom || videojs;
 
 /**
  * Function to invoke when the player is ready.

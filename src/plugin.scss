@@ -1,5 +1,7 @@
-// Sass for videojs-sendfeedbaktest
 
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+// Sass for videojs-sendfeedbaktest
 .video-js {
 
   // This class is added to the video.js element by the plugin by default.
@@ -7,82 +9,121 @@
     display: block;
 
     .vjs-feedback {
-    	background: rgba(0,0,0,0.5);
-    	border-top:4px solid red;
-    	border-left:1px solid grey;
-    	border-right:1px solid grey;
-    	border-bottom: 1px solid grey;
-    	line-height:1.5;
-    	font-family: 'Roboto', Arial, Helvetica, sans-serif;
-    	font-size: 13px;
-    	padding:20px;
-    	position:absolute;
-    	width:90%;
-    	margin:20px auto 0;
-    	left:0;
-    	right: 0;
+      background: rgba(0, 0, 0, 0.5);
+      border-top: 4px solid red;
+      border-left: 1px solid grey;
+      border-right: 1px solid grey;
+      border-bottom: 1px solid grey;
+      line-height: 1.5;
+      font-family: 'Roboto', Arial, Helvetica, sans-serif;
+      font-size: 13px;
+      padding: 20px;
+      position: absolute;
+      width: 90%;
+      margin: 20px auto 0;
+      left: 0;
+      right: 0;
     }
 
-    .vjs-feedback-header{
+    .vjs-feedback-header {
 
-    	margin-bottom:20px;
+      margin-bottom: 20px;
 
-    	h3{
-            margin:0;
-    		font-size:22px;
-    	}
+      h3 {
+        margin: 0;
+        font-size: 22px;
+      }
 
-    	p{
-            margin:0;
-    		color:#999;
-    		font-size:13px;
-    	}
+      p {
+        margin: 0;
+        color: #999;
+        font-size: 13px;
+      }
     }
 
-  
-    .checkbox{
-    	position: relative;
-    	margin: 10px 0 10px 20px;
 
-    	label{
-    		min-height:20px;
-    		cursor:pointer;
-    		margin:0;
+    .checkbox {
+      position: relative;
+      margin: 10px 0 10px 20px;
 
-    		input[type="checkbox"]{
-    			position:absolute;
-    			margin-left:-20px;
-    			margin-top:6px;
-    		}
+      label {
+        min-height: 20px;
+        cursor: pointer;
+        margin: 0;
 
-    		h5{
-    			margin:0;
-    			display:inline;
-    			font-size:15px;
-    		}
+        input[type="checkbox"] {
+          position: absolute;
+          margin-left: -20px;
+          margin-top: 6px;
+        }
 
-    		h6{
-    			margin:0;
-    			margin-bottom:0;
-    			font-size:13px;
-    			color:#999;
-    		}
-    	}
+        h5 {
+          margin: 0;
+          display: inline;
+          font-size: 15px;
+        }
+
+        h6 {
+          margin: 0;
+          margin-bottom: 0;
+          font-size: 13px;
+          color: #999;
+        }
+      }
     }
 
-    .form-submit{
-
-        float:right;
-        background:red;
-        padding:10px;
-        text-align: center;
-        cursor:pointer;
-        font-size:13px;
-        font-weight:bold;
-        text-transform:capitalize;
-        
+    .form-submit {
+      float: right;
+      background: red;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: bold;
+      text-transform: capitalize;
+    } 
+    //google material design feedback icon courtesy of flaticon.com 
+    .open-feedback-form {
+      background: url('../images/feedback.png') no-repeat left center;
+      background-size: contain;
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      right: 5%;
+      cursor: pointer;
+      top: 10%;
+      color: transparent;
+      text-indent: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+    } 
+    //show/hide icon 
+    //icon should be hidden by default 
+    .open-feedback-form {
+      display: none;
+    } 
+    //show when user is active
+    &.vjs-user-active .open-feedback-form {
+      display: block;
+    } 
+    //hide when modal is open 
+    &.vjs-controls-disabled .open-feedback-form {
+      display: none;
     }
 
+    //error message styling
+
+    .error-message{
+        background: lightslategray;
+        width: 50%;
+        padding: 5px 10px;
+        border-radius:3px;
+        margin-top:5px;
+
+        &.fade-out{
+            opacity:0;
+        }
+    }
 
   }
 }
