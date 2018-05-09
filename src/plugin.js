@@ -160,7 +160,12 @@ const constructFeedbackOptions = (player, options) => {
   button.type = "button";
   button.innerHTML = "send feedback";
 
+  let message = _createElement('div', 'error-message');
+  message.innerHTML = '<p>' + 'Form is empty. Please select an option and try again.' + '</p>';
+
   _form.appendChild(button);
+  _form.insertBefore(message, button);
+
 
   container.appendChild(header);
   container.appendChild(_form);
@@ -217,16 +222,15 @@ const constructFeedbackOptions = (player, options) => {
         console.log(flag)
         return flag;
       }
-      return flag
+      message.classList.remove('active');
+      return flag;
     }
   }
 
-  button.addEventListener('click', function(event, elements) {
-    console.log(checkEmptyForm());
+  button.addEventListener('click', function(event) {
+
     if (!checkEmptyForm()) {
-      let message = _createElement('div', 'error-message');
-      message.innerHTML = '<p>' + 'Form is empty. Please select an option and try again.' + '</p>';
-      _form.insertBefore(message, button);
+      message.className += ' active';
 
     } else {
       button.disabled = true;

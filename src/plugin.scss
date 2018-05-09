@@ -119,9 +119,11 @@
         padding: 5px 10px;
         border-radius:3px;
         margin-top:5px;
-
-        &.fade-out{
-            opacity:0;
+        opacity:0;
+        transition: opacity .2s ease-in;
+        
+        &.active{
+            opacity:1;
         }
     }
 
