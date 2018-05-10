@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
 // Sass for videojs-sendfeedbaktest
@@ -8,7 +7,7 @@
   &.vjs-sendcustomerfeedback {
     display: block;
 
-    .vjs-feedback {
+    .vjs-feedback-container {
       background: rgba(0, 0, 0, 0.5);
       border-top: 4px solid red;
       border-left: 1px solid grey;
@@ -23,6 +22,14 @@
       margin: 20px auto 0;
       left: 0;
       right: 0;
+    }
+
+    .vjs-feedback {
+      &:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
     }
 
     .vjs-feedback-header {
@@ -81,8 +88,7 @@
       font-size: 13px;
       font-weight: bold;
       text-transform: capitalize;
-    } 
-    //google material design feedback icon courtesy of flaticon.com 
+    } //google material design feedback icon courtesy of flaticon.com 
     .open-feedback-form {
       background: url('../images/feedback.png') no-repeat left center;
       background-size: contain;
@@ -96,36 +102,38 @@
       text-indent: 100%;
       white-space: nowrap;
       overflow: hidden;
-    } 
-    //show/hide icon 
+    } //show/hide icon 
     //icon should be hidden by default 
     .open-feedback-form {
       display: none;
-    } 
-    //show when user is active
+    } //show when user is active
     &.vjs-user-active .open-feedback-form {
       display: block;
-    } 
-    //hide when modal is open 
+    } //hide when modal is open 
     &.vjs-controls-disabled .open-feedback-form {
       display: none;
+    } //error message styling
+    .error-message {
+      background: lightslategray;
+      width: 50%;
+      padding: 5px 10px;
+      border-radius: 3px;
+      margin-top: 5px;
+      opacity: 0;
+      transition: opacity .2s ease-in;
+
+      &.active {
+        opacity: 1;
+      }
     }
 
-    //error message styling
-
-    .error-message{
-        background: lightslategray;
-        width: 50%;
-        padding: 5px 10px;
-        border-radius:3px;
-        margin-top:5px;
-        opacity:0;
-        transition: opacity .2s ease-in;
-        
-        &.active{
-            opacity:1;
-        }
+    .success-message{
+        color:green;
+        font-size:15px;
+        text-align:center;
     }
+
+
 
   }
 }

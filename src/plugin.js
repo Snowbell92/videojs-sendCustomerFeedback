@@ -64,22 +64,44 @@ const getPlayerErrors = (player) => {
 
 function _createElement(type, className) {
   let el = document.createElement(type);
-  el.className = className;
+  if (className) {
+    el.className = className;
+  }
   return el;
 }
 
 //builds our httprequest
 
-function sendData(form, url, userIp) {
+function sendData(form, url, userIp, modal) {
 
   let XHR = new XMLHttpRequest();
   let feedbackFormData = new FormData(form);
 
+  let _element = document.getElementsByClassName('vjs-feedback-container');
+
   XHR.addEventListener('load', function(event) {
+
+  	//hides loader
+
+
+  	//shows success message
+    let successMessage = _createElement('div', 'success');
+    successMessage.innerHTML = '<p>' + 'Your feedback was sent successfully.Thank you for taking your time to let us know.' + '</p>'
+    _element[0].appendChild(successMessage);
+
+    //closes the modal.
+    window.setTimeout(function() {
+      modal.close();
+    }, 5000)
+
+
     console.log(event.target.responseText);
   });
 
   XHR.addEventListener('error', function(event) {
+    let failureMessage = _createElement('div', 'failed');
+    failureMessage.innerHTML = '<p>' + 'Sorry! There was a problem and your feedback could not be submitted. Perhaps try again later?' + '</p>' + '<p>' + 'Error:' + event.target.responseText + '</p>'
+    _element[0].appendChild(failureMessage);
     console.log(event.target.responseText)
   })
 
@@ -116,7 +138,7 @@ const constructFeedbackOptions = (player, options) => {
     header = _createElement('div', 'vjs-feedback-header'),
     title = _createElement('h3', 'vjs-feedback-form-title'),
     description = _createElement('p', 'vjs-feedback-form-description'),
-    _form = _createElement('form', 'vjs-feedback-form form-control')
+    _form = _createElement('form', 'vjs-feedback-form')
 
   title.innerHTML = options.title;
   description.innerHTML = options.description;
@@ -129,16 +151,16 @@ const constructFeedbackOptions = (player, options) => {
   for (let i = 0; i <= j; i++) {
 
     let _div = _createElement('div', 'checkbox'),
-      _label = _createElement('label', ''),
-      _input = _createElement('input', '');
+      _label = _createElement('label'),
+      _input = _createElement('input');
     _input.type = feedback[i].optionType;
     _input.value = feedback[i].text;
     _input.name = "feedback[]";
 
-    let _text = _createElement('h5', '');
+    let _text = _createElement('h5');
     _text.innerHTML = feedback[i].text;
 
-    let _subtext = _createElement('h6', '');
+    let _subtext = _createElement('h6');
     _subtext.innerHTML = feedback[i].subtext;
 
     _label.appendChild(_input);
@@ -161,7 +183,6 @@ const constructFeedbackOptions = (player, options) => {
   button.innerHTML = "send feedback";
 
   let message = _createElement('div', 'error-message');
-  message.innerHTML = '<p>' + 'Form is empty. Please select an option and try again.' + '</p>';
 
   _form.appendChild(button);
   _form.insertBefore(message, button);
@@ -174,7 +195,7 @@ const constructFeedbackOptions = (player, options) => {
 
   //let's make a modal window and append our UI to it.
 
-  let contentEl = _createElement('div');
+  let contentEl = _createElement('div', 'vjs-feedback-container');
   contentEl.appendChild(_frag);
 
   let ModalDialog = videojs.getComponent('ModalDialog');
@@ -219,22 +240,23 @@ const constructFeedbackOptions = (player, options) => {
 
       if (_form.elements[i].checked) {
         flag = true;
-        console.log(flag)
         return flag;
+        break;
       }
-      message.classList.remove('active');
-      return flag;
     }
+    message.classList.remove('active');
+    return flag;
   }
 
   button.addEventListener('click', function(event) {
 
     if (!checkEmptyForm()) {
+      message.innerHTML = '<p>' + 'Form is empty. Please select an option and try again.' + '</p>';
       message.className += ' active';
 
     } else {
       button.disabled = true;
-      sendData(_form, options.url, options.userIp);
+      sendData(_form, options.url, options.userIp, modal);
     }
   })
 }
