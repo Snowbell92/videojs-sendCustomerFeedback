@@ -33,14 +33,11 @@
       }
     }
 
-    //hide when loader is visible
+    //hide when loader is visible. also when any message is visible
 
-    .loader ~ .vjs-feedback{
-        opacity:0.65;
-    }
-
-    .loader.hide ~ .vjs-feedback{
-        opacity:1; 
+    .loader ~ .vjs-feedback,
+    .message ~ .vjs-feedback{
+        opacity:0.35;
     }
 
     .vjs-feedback-header {
@@ -129,7 +126,8 @@
     } //hide when modal is open 
     &.vjs-controls-disabled .open-feedback-form {
       display: none;
-    } //error message styling
+    }
+    //error message for when form is empty styling
     .error-message {
       background: lightslategray;
       width: 50%;
@@ -144,11 +142,36 @@
       }
     }
 
-    .success-message {
-      color: green;
-      font-size: 15px;
-      text-align: center;
-    } //helper class for hiding something 
+    .message{
+        position:absolute;
+        width:100%;
+        height:100%;
+        top:0;
+        left:0;
+        right:0;
+        bottom:0;
+        text-align:center;
+        font-size:14px;
+        line-height:1.25;
+        display:table;
+
+        > div{
+            display:table-cell;
+            vertical-align: middle;
+            padding:0 20px;
+
+            h4{
+                font-size:18px;
+                margin:10px 0;
+            }
+
+            p{
+                font-size:14px;
+            }
+        }
+    }
+
+    //helper class for hiding something 
     .hide {
       display: none;
     }

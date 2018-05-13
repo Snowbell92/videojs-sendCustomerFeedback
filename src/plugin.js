@@ -83,14 +83,13 @@ function sendData(form, url, userIp, modal) {
   XHR.addEventListener('load', function(event) {
 
     // removes loader
-    // _element[0].removeChild(loader);
-    loader.className += ' hide';
+    _element[0].removeChild(loader);
 
     // shows success message
-    const successMessage = _createElement('div', 'success');
+    const successMessage = _createElement('div', 'success message');
 
-    successMessage.innerHTML = '<p>' + 'Your feedback was sent successfully.Thank you for taking your time to let us know.' + '</p>'
-    _element[0].appendChild(successMessage);
+    successMessage.innerHTML = '<div>'+'<h4>'+'Your feedback was sent successfully.'+'</h4>'+'<p>'+'Thank you for taking your time to let us know.' +'</p>'+'</div>'
+    _element[0].insertAdjacentElement('afterbegin', successMessage);
 
     // activate the button again
     form.getElementsByTagName('button')[0].disabled = false;
@@ -115,9 +114,9 @@ function sendData(form, url, userIp, modal) {
     _element[0].removeChild(loader);
 
     // shows error message
-    const failureMessage = _createElement('div', 'failed');
+    const failureMessage = _createElement('div', 'failed message');
 
-    failureMessage.innerHTML = '<p>' + 'Sorry! There was a problem and your feedback could not be submitted. Perhaps try again later?' + '</p>' + '<p>' + 'Error:' + event.target.responseText + '</p>'
+    failureMessage.innerHTML = '<div>'+'<h4>'+'Sorry! There was a problem and your feedback could not be submitted. Perhaps try again later?' + '</h4>' + '<p>' + 'Error:' + event.target.responseText + '</p>'+'</div>'
     _element[0].appendChild(failureMessage);
 
     // activate the button again
@@ -174,7 +173,7 @@ const constructFeedbackOptions = (player, options) => {
     let _div = _createElement('div', 'checkbox'),
       _label = _createElement('label'),
       _input = _createElement('input');
-      
+
     _input.type = feedback[i].optionType;
     _input.value = feedback[i].text;
     _input.name = "feedback[]";
