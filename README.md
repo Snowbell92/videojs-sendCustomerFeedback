@@ -56,10 +56,10 @@ require('videojs-sendcustomerfeedback');
 
 var player = videojs('my-video');
 
-player.sendcustomerfeedback();-->
+player.sendcustomerfeedback(); -->
 ```
 <!--
-### RequireJS/AMD-->
+### RequireJS/AMD -->
 
 <!--When using with RequireJS (or another AMD library), get the script in whatever way you prefer and `require` the plugin as you normally would:
 
