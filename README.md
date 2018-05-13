@@ -40,7 +40,7 @@ This is the simplest case. Get the script in whatever way you prefer and include
 
   player.sendcustomerfeedback();
 </script>
-
+```
 ## License
 
 MIT. Copyright (c) Samia Ruponti &lt;samia@bongobd.com&gt;
