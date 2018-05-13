@@ -124,6 +124,16 @@ function sendData(form, url, userIp, modal) {
 
     // reset the form. 
     form.reset();
+
+    // closes the modal and hides the success div.
+    window.setTimeout(function() {
+      modal.close();
+      // remove success message too, if it exists.
+      if (failureMessage) {
+        _element[0].removeChild(failureMessage);
+      };
+    }, 5000)
+    
     console.log(event.target.responseText)
   })
 
