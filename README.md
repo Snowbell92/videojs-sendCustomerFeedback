@@ -19,10 +19,10 @@ still work in progress.
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 ## Installation
-
+<!--
 ```sh
 npm install --save videojs-sendcustomerfeedback
-```
+```-->
 
 ## Usage
 
@@ -58,10 +58,10 @@ var player = videojs('my-video');
 
 player.sendcustomerfeedback();-->
 ```
+<!--
+### RequireJS/AMD-->
 
-### RequireJS/AMD
-
-When using with RequireJS (or another AMD library), get the script in whatever way you prefer and `require` the plugin as you normally would:
+<!--When using with RequireJS (or another AMD library), get the script in whatever way you prefer and `require` the plugin as you normally would:
 
 ```js
 require(['video.js', 'videojs-sendcustomerfeedback'], function(videojs) {
@@ -70,7 +70,7 @@ require(['video.js', 'videojs-sendcustomerfeedback'], function(videojs) {
   player.sendcustomerfeedback();
 });
 ```
-
+-->
 ## License
 
 MIT. Copyright (c) Samia Ruponti &lt;samia@bongobd.com&gt;
