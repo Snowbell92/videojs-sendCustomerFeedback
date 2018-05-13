@@ -4,23 +4,23 @@ import { version as VERSION } from '../package.json';
 
 // Default options for the plugin.
 const defaults = {
-  title: "",
-  description: "",
-  url: "", // the url for the form to submit
-  userIp: '', //optional, should get from twig. 
+  title:'',
+  description: '',
+  url: '', 
+  userIp: '', 
   feedbackOptions: [{
-    optionType: 'checkbox', // can be radio too, if needed. 
+    optionType: 'checkbox',
     text: '',
     subtext: '',
     shouldHaveATextarea: false
   }]
 };
 
-// capturing deviceInfo. Using platform.js 
-//github : https://github.com/bestiejs/platform.js
+// capturing deviceInfo. Using platform.js
+// github : https://github.com/bestiejs/platform.js
 
 const getDeviceInfo = () => {
-  let deviceInfo = {
+  const deviceInfo = {
     browser: platform.name,
     device: platform.product || 'No product information was found',
     deviceUserAgent: platform.ua,
@@ -30,14 +30,14 @@ const getDeviceInfo = () => {
     osVersion: platform.os.version,
     deviceManufacturer: platform.manufacturer || 'No manufacturer information was found',
     deviceDescription: platform.description
-  }
+  };
 
   return JSON.stringify(deviceInfo);
 
-}
+};
 
-//let's capture any error that player might throw
-//the whole purpose of the plugin is to submit errors and feedbacks. 
+// let's capture any error that player might throw
+// the whole purpose of the plugin is to submit errors and feedbacks.
 
 const getPlayerErrors = (player) => {
 
