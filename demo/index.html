@@ -4,6 +4,9 @@
 <head>
   <meta charset="utf-8">
   <title>Demo - Capture customer feedback</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="css/video-js.min.css" rel="stylesheet">
   <link href="css/videojs-sendcustomerfeedback.css" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="css/demo.css">
@@ -11,14 +14,18 @@
 
 <body>
   <div class="container">
-    <div class="header">
-      <h1>VideoJS - Send customer feedback demo</h1>
-      <p>Adds a customer feedback form to videoJS player so that users can send feedbacks or report errors.</p>
-    </div>
-    <div class="video embed-responsive embed-responsive-16by9">
-      <video id="videojs-sendcustomerfeedback-player" class="video-js vjs-default-skin" controls autoplay="true" data-setup='{"fluid": true}'>
-        <source src="//vjs.zencdn.net/v/oceans.mp4" type='video/mp4'>
-      </video>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="header">
+          <h1>VideoJS - Send customer feedback demo</h1>
+          <p>Adds a customer feedback form to videoJS player so that users can send feedbacks or report errors.</p>
+        </div>
+        <div class="video embed-responsive embed-responsive-16by9">
+          <video id="videojs-sendcustomerfeedback-player" class="video-js vjs-default-skin" controls data-setup='{"fluid": true}'>
+            <source src="//vjs.zencdn.net/v/oceans.mp4" type='video/mp4'>
+          </video>
+        </div>
+      </div>
     </div>
   </div>
   <script src="js/es5-shim.min.js"></script>
