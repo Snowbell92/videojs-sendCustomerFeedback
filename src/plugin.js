@@ -87,7 +87,8 @@ function sendData(form, url, userIp, modal) {
     loader.className += ' hide';
 
     // shows success message
-    let successMessage = _createElement('div', 'success');
+    const successMessage = _createElement('div', 'success');
+
     successMessage.innerHTML = '<p>' + 'Your feedback was sent successfully.Thank you for taking your time to let us know.' + '</p>'
     _element[0].appendChild(successMessage);
 
@@ -103,9 +104,8 @@ function sendData(form, url, userIp, modal) {
       // remove success message too, if it exists.
       if (successMessage) {
         _element[0].removeChild(successMessage);
-      }
+      };
     }, 5000)
-
 
     console.log(event.target.responseText);
   });
@@ -115,7 +115,8 @@ function sendData(form, url, userIp, modal) {
     _element[0].removeChild(loader);
 
     // shows error message
-    let failureMessage = _createElement('div', 'failed');
+    const failureMessage = _createElement('div', 'failed');
+
     failureMessage.innerHTML = '<p>' + 'Sorry! There was a problem and your feedback could not be submitted. Perhaps try again later?' + '</p>' + '<p>' + 'Error:' + event.target.responseText + '</p>'
     _element[0].appendChild(failureMessage);
 
@@ -132,27 +133,25 @@ function sendData(form, url, userIp, modal) {
   feedbackFormData.append('userAgent', navigator.userAgent);
   feedbackFormData.append('platform', navigator.platform);
   feedbackFormData.append('userIp', userIp);
-  feedbackFormData.append('error[]', getPlayerErrors(player)); //can videoJS throw multiple errors? 
+  feedbackFormData.append('error[]', getPlayerErrors(player));
   feedbackFormData.append('deviceInfo', getDeviceInfo());
-
-
 
   XHR.open("POST", url);
 
   XHR.send(feedbackFormData);
 
-}
+};
 
 
 const constructFeedbackOptions = (player, options) => {
 
   player.on('error', function() {
     getPlayerErrors(player);
-  })
+  });
 
-  // constructing the options div
+  // constructing the options div. feedback is the default object.
 
-  let feedback = options.feedbackOptions; //see default object
+  const feedback = options.feedbackOptions; 
 
   let _frag = document.createDocumentFragment();
 
@@ -175,6 +174,7 @@ const constructFeedbackOptions = (player, options) => {
     let _div = _createElement('div', 'checkbox'),
       _label = _createElement('label'),
       _input = _createElement('input');
+      
     _input.type = feedback[i].optionType;
     _input.value = feedback[i].text;
     _input.name = "feedback[]";
