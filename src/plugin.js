@@ -74,6 +74,8 @@ function _createElement(type, className) {
 
 function sendData(form, url, userIp, modal) {
 
+  console.log(this);
+
   let XHR = new XMLHttpRequest();
   let feedbackFormData = new FormData(form);
 
@@ -89,9 +91,20 @@ function sendData(form, url, userIp, modal) {
     successMessage.innerHTML = '<p>' + 'Your feedback was sent successfully.Thank you for taking your time to let us know.' + '</p>'
     _element[0].appendChild(successMessage);
 
-    //closes the modal.
+    //activate the button again
+    form.getElementsByTagName('button')[0].disabled = false;
+    
+
+    //reset the form. 
+    form.reset();
+
+    //closes the modal and hides the success div.
     window.setTimeout(function() {
       modal.close();
+      //remve success message too, if it exists.
+      if(successMessage){
+      	_element[0].removeChild(successMessage);
+      }
     }, 5000)
 
 
