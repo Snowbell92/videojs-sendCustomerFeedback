@@ -74,26 +74,27 @@ function _createElement(type, className) {
 
 function sendData(form, url, userIp, modal) {
 
-  console.log(this);
+  let _element = document.getElementsByClassName('vjs-feedback-container');
+  let loader = _element[0].getElementsByClassName('loader')[0];
 
   let XHR = new XMLHttpRequest();
   let feedbackFormData = new FormData(form);
 
-  let _element = document.getElementsByClassName('vjs-feedback-container');
+
 
   XHR.addEventListener('load', function(event) {
 
-  	//hides loader
+    //removes loader
+    // _element[0].removeChild(loader);
+    loader.className += ' hide';
 
-
-  	//shows success message
+    //shows success message
     let successMessage = _createElement('div', 'success');
     successMessage.innerHTML = '<p>' + 'Your feedback was sent successfully.Thank you for taking your time to let us know.' + '</p>'
     _element[0].appendChild(successMessage);
 
     //activate the button again
     form.getElementsByTagName('button')[0].disabled = false;
-    
 
     //reset the form. 
     form.reset();
@@ -101,9 +102,9 @@ function sendData(form, url, userIp, modal) {
     //closes the modal and hides the success div.
     window.setTimeout(function() {
       modal.close();
-      //remve success message too, if it exists.
-      if(successMessage){
-      	_element[0].removeChild(successMessage);
+      //remove success message too, if it exists.
+      if (successMessage) {
+        _element[0].removeChild(successMessage);
       }
     }, 5000)
 
@@ -112,9 +113,19 @@ function sendData(form, url, userIp, modal) {
   });
 
   XHR.addEventListener('error', function(event) {
+    //removes loader
+    _element[0].removeChild(loader);
+
+    //shows error message
     let failureMessage = _createElement('div', 'failed');
     failureMessage.innerHTML = '<p>' + 'Sorry! There was a problem and your feedback could not be submitted. Perhaps try again later?' + '</p>' + '<p>' + 'Error:' + event.target.responseText + '</p>'
     _element[0].appendChild(failureMessage);
+
+    //activate the button again
+    form.getElementsByTagName('button')[0].disabled = false;
+
+    //reset the form. 
+    form.reset();
     console.log(event.target.responseText)
   })
 
@@ -269,7 +280,20 @@ const constructFeedbackOptions = (player, options) => {
 
     } else {
       button.disabled = true;
-      sendData(_form, options.url, options.userIp, modal);
+      console.log('processing');
+      
+      //show a loading animation first
+
+      let loader = _createElement('div', 'loader');
+      loader.innerHTML = 'Loading';
+      contentEl.insertBefore(loader, container);;
+
+
+      //simulate server delay for 10 seconds and send the form
+      setTimeout(function() {
+        sendData(_form, options.url, options.userIp, modal);
+      }, 10000);
+
     }
   })
 }

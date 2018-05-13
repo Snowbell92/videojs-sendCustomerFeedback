@@ -22,6 +22,7 @@
       margin: 20px auto 0;
       left: 0;
       right: 0;
+      overflow:hidden;
     }
 
     .vjs-feedback {
@@ -30,6 +31,16 @@
         display: table;
         clear: both;
       }
+    }
+
+    //hide when loader is visible
+
+    .loader ~ .vjs-feedback{
+        opacity:0.65;
+    }
+
+    .loader.hide ~ .vjs-feedback{
+        opacity:1; 
     }
 
     .vjs-feedback-header {
@@ -88,6 +99,12 @@
       font-size: 13px;
       font-weight: bold;
       text-transform: capitalize;
+
+      &:disabled,
+      &[disabled] {
+        cursor: not-allowed;
+        opacity: 0.65;
+      }
     } //google material design feedback icon courtesy of flaticon.com 
     .open-feedback-form {
       background: url('../images/feedback.png') no-repeat left center;
@@ -127,19 +144,67 @@
       }
     }
 
-    .success-message{
-        color:green;
-        font-size:15px;
-        text-align:center;
+    .success-message {
+      color: green;
+      font-size: 15px;
+      text-align: center;
+    } //helper class for hiding something 
+    .hide {
+      display: none;
     }
 
-    //helper class for hiding something 
+    /****************************************/
+    /**** css loader - credit Luke Hass - https://github.com/lukehaas/css-loaders */
 
-    .hide{
-        display:none;
+    // positioning stuff. if you take this off, don't forget to add a 'position:relative' to the loader.
+
+    .loader{
+        position:absolute;
+        top:35%;
+        left:45%;
     }
 
+    .loader,
+    .loader:after {
+      border-radius: 50%;
+      width: 6em;
+      height: 6em;
+    }
+    .loader {  
+      margin: auto;
+      font-size: 10px;
+      text-indent: -9999em;
+      border-top: 0.6em solid rgba(255, 255, 255, 0.2);
+      border-right: 0.6em solid rgba(255, 255, 255, 0.2);
+      border-bottom: 0.6em solid rgba(255, 255, 255, 0.2);
+      border-left: 0.6em solid #ffffff;
+      -webkit-transform: translateZ(0);
+      -ms-transform: translateZ(0);
+      transform: translateZ(0);
+      -webkit-animation: load8 1.1s infinite linear;
+      animation: load8 1.1s infinite linear;
+    }
+  }
+}
 
+@-webkit-keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
 
+@keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
