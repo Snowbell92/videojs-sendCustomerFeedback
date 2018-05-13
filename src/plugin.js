@@ -191,7 +191,7 @@ const constructFeedbackOptions = (player, options) => {
 
     _div.appendChild(_label);
 
-    if (feedback[i].shouldHaveATextarea == true) {
+    if (feedback[i].shouldHaveATextarea === true) {
       console.log('show textarea')
     }
 
@@ -217,27 +217,26 @@ const constructFeedbackOptions = (player, options) => {
 
   // let's make a modal window and append our UI to it.
 
-  let contentEl = _createElement('div', 'vjs-feedback-container');
+  const contentEl = _createElement('div', 'vjs-feedback-container');
+
   contentEl.appendChild(_frag);
 
-  let ModalDialog = videojs.getComponent('ModalDialog');
-  let modal = new ModalDialog(player, {
+  const ModalDialog = videojs.getComponent('ModalDialog');
+  const modal = new ModalDialog(player, {
     content: contentEl,
     // We don't want this modal to go away when it closes.
     temporary: false,
   });
 
-
   player.addChild(modal);
-
 
   // let's make the floating button that will open the modal window. 
 
-  let floatingButton = _createElement('button', 'open-feedback-form');
-  floatingButton.type = 'button';
-  floatingButton.title = "Problem? Send us some details!";
-  floatingButton.innerHTML = "open feedback";
+  const floatingButton = _createElement('button', 'open-feedback-form');
 
+  floatingButton.type = 'button';
+  floatingButton.title = 'Problem? Send us some details!';
+  floatingButton.innerHTML = 'open feedback';
 
   player.el().appendChild(floatingButton);
 
@@ -246,10 +245,9 @@ const constructFeedbackOptions = (player, options) => {
     modal.open();
   })
 
-
   // let's take care of posting the data
 
-  // I'm using formdata object, so no < IE11 and opera mini support. 
+  // I'm using formdata object, so no < IE11 and opera mini support.
   // at least opera mini is consistent, it does not support ANY javascript!
 
   // but have to check first if the form is empty.
@@ -278,14 +276,13 @@ const constructFeedbackOptions = (player, options) => {
 
     } else {
       button.disabled = true;
-      console.log('processing');
       
       // show a loading animation first
 
-      let loader = _createElement('div', 'loader');
-      loader.innerHTML = 'Loading';
-      contentEl.insertBefore(loader, container);;
+      const loader = _createElement('div', 'loader');
 
+      loader.innerHTML = 'Loading'; 
+      contentEl.insertBefore(loader, container);
 
       // simulate server delay for 10 seconds and send the form
       setTimeout(function() {
@@ -293,10 +290,8 @@ const constructFeedbackOptions = (player, options) => {
       }, 10000);
 
     }
-  })
-}
-
-
+  });
+};
 
 // Cross-compatibility for Video.js 5 and 6.
 const registerPlugin = videojs.registerPlugin || videojs.plugin;
