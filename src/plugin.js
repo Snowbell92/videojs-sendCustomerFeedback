@@ -4,10 +4,10 @@ import { version as VERSION } from '../package.json';
 
 // Default options for the plugin.
 const defaults = {
-  title:'',
+  title: '',
   description: '',
-  url: '', 
-  userIp: '', 
+  url: '',
+  userIp: '',
   feedbackOptions: [{
     optionType: 'checkbox',
     text: '',
@@ -46,7 +46,6 @@ const getPlayerErrors = (player) => {
     message: ''
   };
 
-
   if (!player.error()) {
     error = 'No error reported on player';
 
@@ -58,51 +57,50 @@ const getPlayerErrors = (player) => {
   }
 
   return error;
-}
+};
 
-//helper function for creating elements 
+// helper function for creating elements
 
 function _createElement(type, className) {
-  let el = document.createElement(type);
+  const el = document.createElement(type);
+
   if (className) {
     el.className = className;
   }
   return el;
 }
 
-//builds our httprequest
+// builds our httprequest
 
 function sendData(form, url, userIp, modal) {
 
-  let _element = document.getElementsByClassName('vjs-feedback-container');
-  let loader = _element[0].getElementsByClassName('loader')[0];
+  const _element = document.getElementsByClassName('vjs-feedback-container');
+  const loader = _element[0].getElementsByClassName('loader')[0];
 
   let XHR = new XMLHttpRequest();
   let feedbackFormData = new FormData(form);
 
-
-
   XHR.addEventListener('load', function(event) {
 
-    //removes loader
+    // removes loader
     // _element[0].removeChild(loader);
     loader.className += ' hide';
 
-    //shows success message
+    // shows success message
     let successMessage = _createElement('div', 'success');
     successMessage.innerHTML = '<p>' + 'Your feedback was sent successfully.Thank you for taking your time to let us know.' + '</p>'
     _element[0].appendChild(successMessage);
 
-    //activate the button again
+    // activate the button again
     form.getElementsByTagName('button')[0].disabled = false;
 
-    //reset the form. 
+    // reset the form. 
     form.reset();
 
-    //closes the modal and hides the success div.
+    // closes the modal and hides the success div.
     window.setTimeout(function() {
       modal.close();
-      //remove success message too, if it exists.
+      // remove success message too, if it exists.
       if (successMessage) {
         _element[0].removeChild(successMessage);
       }
@@ -113,23 +111,23 @@ function sendData(form, url, userIp, modal) {
   });
 
   XHR.addEventListener('error', function(event) {
-    //removes loader
+    // removes loader
     _element[0].removeChild(loader);
 
-    //shows error message
+    // shows error message
     let failureMessage = _createElement('div', 'failed');
     failureMessage.innerHTML = '<p>' + 'Sorry! There was a problem and your feedback could not be submitted. Perhaps try again later?' + '</p>' + '<p>' + 'Error:' + event.target.responseText + '</p>'
     _element[0].appendChild(failureMessage);
 
-    //activate the button again
+    // activate the button again
     form.getElementsByTagName('button')[0].disabled = false;
 
-    //reset the form. 
+    // reset the form. 
     form.reset();
     console.log(event.target.responseText)
   })
 
-  //let's push some extra information to formdata
+  // let's push some extra information to formdata
 
   feedbackFormData.append('userAgent', navigator.userAgent);
   feedbackFormData.append('platform', navigator.platform);
@@ -152,7 +150,7 @@ const constructFeedbackOptions = (player, options) => {
     getPlayerErrors(player);
   })
 
-  //constructing the options div
+  // constructing the options div
 
   let feedback = options.feedbackOptions; //see default object
 
@@ -170,7 +168,7 @@ const constructFeedbackOptions = (player, options) => {
   header.appendChild(title);
   header.appendChild(description);
 
-  //here are the checkboxes
+  // here are the checkboxes
   let j = feedback.length - 1;
   for (let i = 0; i <= j; i++) {
 
@@ -217,7 +215,7 @@ const constructFeedbackOptions = (player, options) => {
 
   _frag.appendChild(container);
 
-  //let's make a modal window and append our UI to it.
+  // let's make a modal window and append our UI to it.
 
   let contentEl = _createElement('div', 'vjs-feedback-container');
   contentEl.appendChild(_frag);
@@ -225,7 +223,7 @@ const constructFeedbackOptions = (player, options) => {
   let ModalDialog = videojs.getComponent('ModalDialog');
   let modal = new ModalDialog(player, {
     content: contentEl,
-    //We don't want this modal to go away when it closes.
+    // We don't want this modal to go away when it closes.
     temporary: false,
   });
 
@@ -233,7 +231,7 @@ const constructFeedbackOptions = (player, options) => {
   player.addChild(modal);
 
 
-  //let's make the floating button that will open the modal window. 
+  // let's make the floating button that will open the modal window. 
 
   let floatingButton = _createElement('button', 'open-feedback-form');
   floatingButton.type = 'button';
@@ -249,13 +247,13 @@ const constructFeedbackOptions = (player, options) => {
   })
 
 
-  //let's take care of posting the data
+  // let's take care of posting the data
 
-  //I'm using formdata object, so no < IE11 and opera mini support. 
-  //at least opera mini is consistent, it does not support ANY javascript!
+  // I'm using formdata object, so no < IE11 and opera mini support. 
+  // at least opera mini is consistent, it does not support ANY javascript!
 
-  //but have to check first if the form is empty.
-  //no point submitting an empty form.
+  // but have to check first if the form is empty.
+  // no point submitting an empty form.
   let flag = false;
 
   function checkEmptyForm(elements) {
@@ -282,14 +280,14 @@ const constructFeedbackOptions = (player, options) => {
       button.disabled = true;
       console.log('processing');
       
-      //show a loading animation first
+      // show a loading animation first
 
       let loader = _createElement('div', 'loader');
       loader.innerHTML = 'Loading';
       contentEl.insertBefore(loader, container);;
 
 
-      //simulate server delay for 10 seconds and send the form
+      // simulate server delay for 10 seconds and send the form
       setTimeout(function() {
         sendData(_form, options.url, options.userIp, modal);
       }, 10000);
@@ -300,9 +298,9 @@ const constructFeedbackOptions = (player, options) => {
 
 
 
-//Cross-compatibility for Video.js 5 and 6.
+// Cross-compatibility for Video.js 5 and 6.
 const registerPlugin = videojs.registerPlugin || videojs.plugin;
-//const dom = videojs.dom || videojs;
+// const dom = videojs.dom || videojs;
 
 /**
  * Function to invoke when the player is ready.
