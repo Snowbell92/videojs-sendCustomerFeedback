@@ -12,7 +12,6 @@ const defaults = {
     optionType: 'checkbox',
     text: '',
     subtext: '',
-    shouldHaveATextarea: false
   }]
 };
 
@@ -106,7 +105,6 @@ function sendData(form, url, userIp, modal) {
       };
     }, 5000)
 
-    console.log(event.target.responseText);
   });
 
   XHR.addEventListener('error', function(event) {
@@ -133,8 +131,7 @@ function sendData(form, url, userIp, modal) {
         _element[0].removeChild(failureMessage);
       };
     }, 5000)
-    
-    console.log(event.target.responseText)
+
   })
 
   // let's push some extra information to formdata
@@ -199,13 +196,7 @@ const constructFeedbackOptions = (player, options) => {
     _label.appendChild(_subtext);
 
     _div.appendChild(_label);
-
-    if (feedback[i].shouldHaveATextarea === true) {
-      console.log('show textarea')
-    }
-
     _form.appendChild(_div);
-
 
   }
 
@@ -250,7 +241,6 @@ const constructFeedbackOptions = (player, options) => {
   player.el().appendChild(floatingButton);
 
   floatingButton.addEventListener('click', function() {
-    console.log('clicked');
     modal.open();
   })
 
