@@ -40,37 +40,7 @@ This is the simplest case. Get the script in whatever way you prefer and include
 
   player.sendcustomerfeedback();
 </script>
-```
-<!--
-### Browserify/CommonJS -->
 
-<!--When using with Browserify, install videojs-sendcustomerfeedback via npm and `require` the plugin as you would any other module. 
-
-```js
-var videojs = require('video.js');
-
-// The actual plugin function is exported by this module, but it is also
-// attached to the `Player.prototype`; so, there is no need to assign it
-// to a variable.
-require('videojs-sendcustomerfeedback');
-
-var player = videojs('my-video');
-
-player.sendcustomerfeedback(); -->
-```
-<!--
-### RequireJS/AMD -->
-
-<!--When using with RequireJS (or another AMD library), get the script in whatever way you prefer and `require` the plugin as you normally would:
-
-```js
-require(['video.js', 'videojs-sendcustomerfeedback'], function(videojs) {
-  var player = videojs('my-video');
-
-  player.sendcustomerfeedback();
-});
-```
--->
 ## License
 
 MIT. Copyright (c) Samia Ruponti &lt;samia@bongobd.com&gt;
