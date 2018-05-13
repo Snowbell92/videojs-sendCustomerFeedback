@@ -41,10 +41,10 @@ This is the simplest case. Get the script in whatever way you prefer and include
   player.sendcustomerfeedback();
 </script>
 ```
+<!--
+### Browserify/CommonJS -->
 
-### Browserify/CommonJS
-
-When using with Browserify, install videojs-sendcustomerfeedback via npm and `require` the plugin as you would any other module.
+<!--When using with Browserify, install videojs-sendcustomerfeedback via npm and `require` the plugin as you would any other module. 
 
 ```js
 var videojs = require('video.js');
@@ -56,7 +56,7 @@ require('videojs-sendcustomerfeedback');
 
 var player = videojs('my-video');
 
-player.sendcustomerfeedback();
+player.sendcustomerfeedback();-->
 ```
 
 ### RequireJS/AMD
