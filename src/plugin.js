@@ -80,7 +80,7 @@ function sendData(form, url, userIp, modal) {
   //catch if url is not provided 
 
   if (!url) {
-    throw new Error('URL is required');
+    throw new Error('Missing option: URL is required');
   }
 
   const _element = document.getElementsByClassName('vjs-feedback-container');
@@ -90,8 +90,6 @@ function sendData(form, url, userIp, modal) {
   let feedbackFormData = new FormData(form);
 
   XHR.addEventListener('load', function(event) {
-
-    console.log('intial' + XHR.status);
 
     // removes loader
     _element[0].removeChild(loader);
@@ -122,7 +120,6 @@ function sendData(form, url, userIp, modal) {
       }, 5000)
 
     } else {
-      console.log('now i got' + XHR.status);
 
       // shows error message
      
@@ -131,7 +128,6 @@ function sendData(form, url, userIp, modal) {
 
       // activate the button again
       form.getElementsByTagName('button')[0].disabled = false;
-
 
       // hides the failure div.
       window.setTimeout(function() {
