@@ -69,9 +69,19 @@ function _createElement(type, className) {
   return el;
 }
 
+// the message container that is going to show up when any response needs to be shown.
+const messageContainer = _createElement('div', 'message'); 
+
+
 // builds our httprequest
 
 function sendData(form, url, userIp, modal) {
+
+  //catch if url is not provided 
+
+  if (!url) {
+    throw new Error('URL is required');
+  }
 
   const _element = document.getElementsByClassName('vjs-feedback-container');
   const loader = _element[0].getElementsByClassName('loader')[0];
@@ -81,56 +91,62 @@ function sendData(form, url, userIp, modal) {
 
   XHR.addEventListener('load', function(event) {
 
+    console.log('intial' + XHR.status);
+
     // removes loader
     _element[0].removeChild(loader);
 
-    // shows success message
-    const successMessage = _createElement('div', 'success message');
+    //load event ignores http codes.so if http code is <400, we show success message.
 
-    successMessage.innerHTML = '<div>'+'<h4>'+'Your feedback was sent successfully.'+'</h4>'+'<p>'+'Thank you for taking your time to let us know.' +'</p>'+'</div>'
-    _element[0].insertAdjacentElement('afterbegin', successMessage);
+    if (XHR.status < 400) {
+      console.log(XHR.status);
 
-    // activate the button again
-    form.getElementsByTagName('button')[0].disabled = false;
+      // shows success message
 
-    // reset the form. 
-    form.reset();
+      messageContainer.innerHTML = '<div>' + '<h4>' + 'Your feedback was sent successfully.' + '</h4>' + '<p>' + 'Thank you for taking your time to let us know.' + '</p>' + '</div>'
+      _element[0].insertAdjacentElement('afterbegin', messageContainer);
 
-    // closes the modal and hides the success div.
-    window.setTimeout(function() {
-      modal.close();
-      // remove success message too, if it exists.
-      if (successMessage) {
-        _element[0].removeChild(successMessage);
-      };
-    }, 5000)
+      // activate the button again
+      form.getElementsByTagName('button')[0].disabled = false;
+
+      // reset the form. 
+      form.reset();
+
+      // closes the modal and hides the success div.
+      window.setTimeout(function() {
+        modal.close();
+        // remove success message too, if it exists.
+        if (messageContainer) {
+          _element[0].removeChild(messageContainer);
+        };
+      }, 5000)
+
+    } else {
+      console.log('now i got' + XHR.status);
+
+      // shows error message
+     
+      messageContainer.innerHTML = '<div>' + '<h4>' + 'Sorry! There was a problem and your feedback could not be submitted. Perhaps try again later?' + '</h4>' + '<p>' + 'Error: ' + event.target.status + '&nbsp;' + event.target.statusText + '</p>' + '</div>'
+      _element[0].appendChild(messageContainer);
+
+      // activate the button again
+      form.getElementsByTagName('button')[0].disabled = false;
+
+
+      // hides the failure div.
+      window.setTimeout(function() {
+        if (messageContainer) {
+          _element[0].removeChild(messageContainer);
+        };
+      }, 5000)
+
+    }
 
   });
 
   XHR.addEventListener('error', function(event) {
-    // removes loader
-    _element[0].removeChild(loader);
 
-    // shows error message
-    const failureMessage = _createElement('div', 'failed message');
 
-    failureMessage.innerHTML = '<div>'+'<h4>'+'Sorry! There was a problem and your feedback could not be submitted. Perhaps try again later?' + '</h4>' + '<p>' + 'Error:' + event.target.responseText + '</p>'+'</div>'
-    _element[0].appendChild(failureMessage);
-
-    // activate the button again
-    form.getElementsByTagName('button')[0].disabled = false;
-
-    // reset the form. 
-    form.reset();
-
-    // closes the modal and hides the success div.
-    window.setTimeout(function() {
-      modal.close();
-      // remove success message too, if it exists.
-      if (failureMessage) {
-        _element[0].removeChild(failureMessage);
-      };
-    }, 5000)
 
   })
 
@@ -157,7 +173,7 @@ const constructFeedbackOptions = (player, options) => {
 
   // constructing the options div. feedback is the default object.
 
-  const feedback = options.feedbackOptions; 
+  const feedback = options.feedbackOptions;
 
   let _frag = document.createDocumentFragment();
 
@@ -275,19 +291,25 @@ const constructFeedbackOptions = (player, options) => {
 
     } else {
       button.disabled = true;
-      
+
       // show a loading animation first
 
       const loader = _createElement('div', 'loader');
 
-      loader.innerHTML = 'Loading'; 
+      loader.innerHTML = 'Loading';
       contentEl.insertBefore(loader, container);
 
-      // simulate server delay for 10 seconds and send the form
-      setTimeout(function() {
-        sendData(_form, options.url, options.userIp, modal);
-      }, 10000);
-
+      // check if url is given, or throw a new error
+      try {
+      	sendData(_form, options.url, options.userIp, modal);
+      }
+      catch(e){
+      	console.log(e);
+      	contentEl.removeChild(loader);
+      	messageContainer.innerHTML = '<div>' + e + '</div>';
+      	contentEl.insertAdjacentElement('afterbegin', messageContainer);
+      }
+      
     }
   });
 };
