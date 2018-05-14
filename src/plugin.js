@@ -70,7 +70,7 @@ function _createElement(type, className) {
 }
 
 // the message container that is going to show up when any response needs to be shown.
-const messageContainer = _createElement('div', 'message'); 
+const messageContainer = _createElement('div', 'message');
 
 
 // builds our httprequest
@@ -122,7 +122,7 @@ function sendData(form, url, userIp, modal) {
     } else {
 
       // shows error message
-     
+
       messageContainer.innerHTML = '<div>' + '<h4>' + 'Sorry! There was a problem and your feedback could not be submitted. Perhaps try again later?' + '</h4>' + '<p>' + 'Error: ' + event.target.status + '&nbsp;' + event.target.statusText + '</p>' + '</div>'
       _element[0].appendChild(messageContainer);
 
@@ -178,6 +178,8 @@ const constructFeedbackOptions = (player, options) => {
     title = _createElement('h3', 'vjs-feedback-form-title'),
     description = _createElement('p', 'vjs-feedback-form-description'),
     _form = _createElement('form', 'vjs-feedback-form')
+
+  _form.name = 'videojs-feedback';
 
   title.innerHTML = options.title;
   description.innerHTML = options.description;
@@ -297,15 +299,14 @@ const constructFeedbackOptions = (player, options) => {
 
       // check if url is given, or throw a new error
       try {
-      	sendData(_form, options.url, options.userIp, modal);
+        sendData(_form, options.url, options.userIp, modal);
+      } catch (e) {
+        console.log(e);
+        contentEl.removeChild(loader);
+        messageContainer.innerHTML = '<div>' + e + '</div>';
+        contentEl.insertAdjacentElement('afterbegin', messageContainer);
       }
-      catch(e){
-      	console.log(e);
-      	contentEl.removeChild(loader);
-      	messageContainer.innerHTML = '<div>' + e + '</div>';
-      	contentEl.insertAdjacentElement('afterbegin', messageContainer);
-      }
-      
+
     }
   });
 };
